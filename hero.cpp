@@ -112,7 +112,7 @@ void Hero::control()
     }
 }
 
-void Hero::isColliding(std::vector<sf::RectangleShape> obstacles)
+void Hero::isColliding(std::vector<sf::Sprite> obstacles)
 {
     bool colision = false;
 
@@ -158,7 +158,7 @@ void Hero::isColliding(std::vector<sf::RectangleShape> obstacles)
     }
 }
 
-void Hero::gravity(std::vector<sf::RectangleShape> obstacles)
+void Hero::gravity(std::vector<sf::Sprite> obstacles)
 {
     if(!using_ladder)
     {
@@ -200,22 +200,21 @@ void Hero::gravity(std::vector<sf::RectangleShape> obstacles)
     }
 }
 
-void Hero::hit(std::vector<BulletEnemy *> BulletVector_enemy)
+void Hero::hit(std::vector<BulletEnemy *> BulletVector_enemy, std::vector<float> EnemyBulletDamage)
 {
-    for (auto &it : BulletVector_enemy)
+    for (size_t i = 0; i < BulletVector_enemy.size(); i++)
     {
-        if (getGlobalBounds().intersects(it->getGlobalBoungs()))
+        if (getGlobalBounds().intersects(BulletVector_enemy[i]->getGlobalBounds()))
         {
-            it->setPosition(sf::Vector2f(1000000, 1000000));
+            BulletVector_enemy[i]->setPosition(sf::Vector2f(1000000, 1000000));
             if (armor_ > 0)
             {
-                armor_ -= 2;
+                armor_ -= EnemyBulletDamage[i];
             }
             else
             {
-                health_ -= 2;
+                health_ -= EnemyBulletDamage[i];
             }
-            std::cout<<health_<<std::endl;
             break;
         }
     }

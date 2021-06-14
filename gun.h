@@ -8,7 +8,7 @@
 class Gun : public sf::Sprite
 {
 public:
-    Gun(float fireRate, float bulletSpeed, float damage, float reloadingTime, int magazineCapasity, int bulletNumber, bool fullauto);
+    Gun(int gunType, float fireRate, float bulletSpeed, float damage, float reloadingTime, int magazineCapasity, int bulletNumber, bool fullauto);
     float getFireRate();
     float getBulletSpeed();
     float getDamage();
@@ -22,6 +22,7 @@ public:
     float getCurretnReloadingTime();
     void setBulletNumber(int bulletNumber);
     int getBulletNumber();
+    int getGunType();
     sf::SoundBuffer getReloadSound();
 
     bool shooting_flag = true;
@@ -34,6 +35,7 @@ private:
     int magazineCapasity_;
     int leftInMagazine_;
     bool fullauto_;
-    float currentReloadingTime_;
+    float currentReloadingTime_ = 0;
     int bulletNumber_;
+    int gunType_;
 };

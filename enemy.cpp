@@ -8,7 +8,7 @@
 #include <iostream>
 
 Enemy::Enemy(const sf::Vector2f &position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize, bool is_walking, bool orientated_right,
-             float speed, float health, int gunType, float detectedDistanceX, float detectedDistanceY, std::vector<sf::RectangleShape> obstacles)
+             float speed, float health, int gunType, float detectedDistanceX, float detectedDistanceY, std::vector<sf::Sprite> obstacles)
 {
     loadTexture(position, texture, textureLayout, textureSize);
     is_walking_ = is_walking;
@@ -176,24 +176,29 @@ void Enemy::atack(sf::Vector2f heroPosition, int colisionType)
     }
 }
 
-void Enemy::hit(std::vector<Bullet*> &BulletVector)
+bool Enemy::hit(std::vector<Bullet*> &BulletVector, Gun* gun)
 {
     for (auto &it : BulletVector)
     {
-        if (getGlobalBounds().intersects(it->getGlobalBoungs()))
+        if (getGlobalBounds().intersects(it->getGlobalBounds()))
         {
             std::cout << x << std::endl;
             x++;
             it->setPosition(sf::Vector2f(1000000, 1000000));
-            health_ -= 10;
+            health_ -= gun->getDamage();
             detected = true;
             break;
         }
     }
     if (health_ <= 0)
     {
-        this -> setPosition(sf::Vector2f(1000000, 1000000));
         detected = false;
+
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -279,7 +284,7 @@ void Enemy::control()
     }
 }
 
-int Enemy::isColliding(std::vector<sf::RectangleShape> obstacles)
+int Enemy::isColliding(std::vector<sf::Sprite> obstacles)
 {
     int colisionType = 0;
 
@@ -338,7 +343,7 @@ int Enemy::isColliding(std::vector<sf::RectangleShape> obstacles)
     return colisionType;
 }
 
-void Enemy::gravity(std::vector<sf::RectangleShape> obstacles)
+void Enemy::gravity(std::vector<sf::Sprite> obstacles)
 {
     bool gravity_flag = true;
 
@@ -377,7 +382,10 @@ void Enemy::gravity(std::vector<sf::RectangleShape> obstacles)
     }
 }
 
-
+bool Enemy::getOrientation()
+{
+    return orientated_right_;
+}
 
 
 

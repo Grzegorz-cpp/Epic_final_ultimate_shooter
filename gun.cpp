@@ -1,6 +1,6 @@
 #include "gun.h"
 
-Gun::Gun(float fireRate, float bulletSpeed, float damage, float reloadingTime, int magazineCapasity, int bulletNumber, bool fullauto)
+Gun::Gun(int gunType, float fireRate, float bulletSpeed, float damage, float reloadingTime, int magazineCapasity, int bulletNumber, bool fullauto)
 {
     fireRate_ = fireRate;
     bulletSpeed_ = bulletSpeed;
@@ -11,6 +11,7 @@ Gun::Gun(float fireRate, float bulletSpeed, float damage, float reloadingTime, i
     leftInMagazine_ = magazineCapasity_;
     currentReloadingTime_ = reloadingTime_;
     bulletNumber_ = bulletNumber;
+    gunType_ = gunType;
 }
 
 float Gun::getFireRate()
@@ -65,6 +66,25 @@ int Gun::getBulletNumber()
 {
     return bulletNumber_;
 }
+
+int Gun::getGunType()
+{
+    return gunType_;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

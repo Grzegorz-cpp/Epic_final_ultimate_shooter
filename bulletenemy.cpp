@@ -11,6 +11,7 @@
 BulletEnemy::BulletEnemy(sf::Vector2f size)
 {
     bulletEnemy.setSize(size);
+    bulletEnemy.setFillColor(sf::Color::Black);
 }
 
 int BulletEnemy::getRight()
@@ -78,7 +79,7 @@ void BulletEnemy::draw(sf::RenderWindow &window)
     window.draw(bulletEnemy);
 }
 
-sf:: FloatRect BulletEnemy::getGlobalBoungs()
+sf:: FloatRect BulletEnemy::getGlobalBounds()
 {
     return bulletEnemy.getGlobalBounds();
 }
@@ -87,8 +88,6 @@ void BulletEnemy::deleteBullet()
 {
     bulletEnemy.setPosition(100000 , 100000);
 }
-
-
 
 
 

@@ -9,6 +9,7 @@
 Bullet::Bullet(sf::Vector2f size)
 {
     bullet.setSize(size);
+    bullet.setFillColor(sf::Color::Black);
 }
 
 int Bullet::getRight()
@@ -76,7 +77,7 @@ void Bullet::draw(sf::RenderWindow &window)
     window.draw(bullet);
 }
 
-sf:: FloatRect Bullet::getGlobalBoungs()
+sf:: FloatRect Bullet::getGlobalBounds()
 {
     return bullet.getGlobalBounds();
 }
@@ -85,8 +86,6 @@ void Bullet::deleteBullet()
 {
     bullet.setPosition(1000000 , 1000000);
 }
-
-
 
 
 

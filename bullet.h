@@ -20,7 +20,7 @@ public:
     sf::Vector2f shootingDirection(sf::Vector2f mousePosition);
     void setOrigin(sf::Vector2f origin);
     void setFireRate(float fireRate);
-    sf:: FloatRect getGlobalBoungs();
+    sf:: FloatRect getGlobalBounds();
     void deleteBullet();
 
 private:

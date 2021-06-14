@@ -12,11 +12,11 @@ public:
     Hero(const sf::Vector2f &position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize);
     void control();
     void setSpeed(float speed);
-    void gravity(std::vector<sf::RectangleShape> obstacles);
+    void gravity(std::vector<sf::Sprite> obstacles);
     void setSpeedUp(float speedUp);
-    void isColliding(std::vector<sf::RectangleShape> obstacles);
+    void isColliding(std::vector<sf::Sprite> obstacles);
     void shoot();
-    void hit(std::vector<BulletEnemy*> BulletVector_enemy);
+    void hit(std::vector<BulletEnemy*> BulletVector_enemy, std::vector<float> EnemyBulletDamage);
     float getHealth();
     void setHealth(float health);
     float getArmor();
@@ -38,7 +38,7 @@ private:
     float maxSpeed_ = 300;
     float acceleration_ = 10;
     float speedUp_ = 0;
-    int floorOffset_ = 10;
+    int floorOffset_ = 0;
     float gravity_ = 10;
     float health_ = 100;
     float armor_ = 75;
