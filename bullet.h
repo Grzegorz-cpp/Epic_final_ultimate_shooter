@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
+#include <math.h>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -17,11 +19,11 @@ public:
     void getTime(float elapesd);
     void draw(sf::RenderWindow &window);
     void setPosition(sf::Vector2f position);
-    sf::Vector2f shootingDirection(sf::Vector2f mousePosition);
     void setOrigin(sf::Vector2f origin);
     void setFireRate(float fireRate);
+    sf::Vector2f shootingDirection(sf::Vector2f mousePosition);
     sf:: FloatRect getGlobalBounds();
-    void deleteBullet();
+    sf::Vector2f getBulletPosition();
 
 private:
     sf::RectangleShape bullet;

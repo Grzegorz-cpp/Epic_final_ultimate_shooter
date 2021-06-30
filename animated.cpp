@@ -1,8 +1,6 @@
 #include "animated.h"
 
-#include <vector>
-
-void Animated::loadTexture(const sf::Vector2f &position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize)
+void Animated::loadTexture(sf::Vector2f position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize)
 {
     this -> setPosition(position);
     this -> setTexture(texture);

@@ -1,19 +1,12 @@
 #include "enemy.h"
 
-#include <vector>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <math.h>
-
-#include <iostream>
-
-Enemy::Enemy(const sf::Vector2f &position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize, bool is_walking, bool orientated_right,
+Enemy::Enemy(sf::Vector2f position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize, bool is_walking, bool orientated_right,
              float speed, float health, int gunType, float detectedDistanceX, float detectedDistanceY, std::vector<sf::Sprite> obstacles)
 {
     loadTexture(position, texture, textureLayout, textureSize);
     is_walking_ = is_walking;
-    speedBackward_ = speed;
-    speedForward_ = -speed;
+    maxSpeedBackward_ = -speed;
+    maxSpeedForward_ = speed;
     health_ = health;
     gunType_ = gunType;
     obstacles_ = obstacles;
@@ -129,17 +122,17 @@ void Enemy::atack(sf::Vector2f heroPosition, int colisionType)
         frame_ = 7;
     }
 
-    if (colisionType == 2 && is_on_floor_ && orientated_right_)
+    if (colisionType == 3 && is_on_floor_ && orientated_right_)
     {
         move_up = true;
         is_on_floor_ = false;
-        speedUp_ = -400;
+        speedUp_ = -700;
     }
     if (colisionType == 4 && is_on_floor_ && !orientated_right_)
     {
         move_up = true;
         is_on_floor_ = false;
-        speedUp_ = -400;
+        speedUp_ = -700;
     }
 
     sf::RectangleShape fireLine(sf::Vector2f(5, 5));
@@ -160,8 +153,6 @@ void Enemy::atack(sf::Vector2f heroPosition, int colisionType)
 
     clear_shoot = true;
 
-    //fireLine.move(fireLineX * 50, fireLineY * 50);
-
     for (auto i = 0; i < sqrt(std::abs(heroPosition.x - getPosition().x) * std::abs(heroPosition.x - getPosition().x) + std::abs(heroPosition.y - getPosition().y) * std::abs(heroPosition.y - getPosition().y)); i++)
     {
         fireLine.move(fireLineX, fireLineY);
@@ -176,16 +167,14 @@ void Enemy::atack(sf::Vector2f heroPosition, int colisionType)
     }
 }
 
-bool Enemy::hit(std::vector<Bullet*> &BulletVector, Gun* gun)
+bool Enemy::hit(std::vector<Bullet*> &BulletVector, Gun* gun, float damageMultipler)
 {
     for (auto &it : BulletVector)
     {
         if (getGlobalBounds().intersects(it->getGlobalBounds()))
         {
-            std::cout << x << std::endl;
-            x++;
             it->setPosition(sf::Vector2f(1000000, 1000000));
-            health_ -= gun->getDamage();
+            health_ -= gun->getDamage() * damageMultipler;
             detected = true;
             break;
         }
@@ -208,13 +197,13 @@ void Enemy::control()
     if (move_forward == true)
     {
         orientated_right_ = true;
-        if (speedForward_ < maxSpeed_)
+        if (speedForward_ < maxSpeedForward_)
         {
             move((speedForward_ += acceleration_) * 0.01666, 0);
         }
         else
         {
-            move(maxSpeed_ * 0.01666, 0);
+            move(maxSpeedForward_ * 0.01666, 0);
         }
 
         frequency_--;
@@ -234,13 +223,13 @@ void Enemy::control()
     if (move_backward == true)
     {
         orientated_right_ = false;
-        if (speedBackward_ > -maxSpeed_)
+        if (speedBackward_ > maxSpeedBackward_)
         {
             move((speedBackward_ -= acceleration_) * 0.01666, 0);
         }
         else
         {
-            move(-maxSpeed_ * 0.01666, 0);
+            move(maxSpeedBackward_ * 0.01666, 0);
         }
 
         frequency_--;
@@ -296,7 +285,7 @@ int Enemy::isColliding(std::vector<sf::Sprite> obstacles)
                 getPosition().y + getGlobalBounds().height > it.getGlobalBounds().top + 20)
         {
             move_forward = false;
-            if(getGlobalBounds().top <= it.getGlobalBounds().top)
+            if(getGlobalBounds().top <= it.getGlobalBounds().top - jumpHight_)
             {
                 colisionType = 3;
             }
@@ -312,7 +301,7 @@ int Enemy::isColliding(std::vector<sf::Sprite> obstacles)
                 getPosition().y + getGlobalBounds().height > it.getGlobalBounds().top + 15)
         {
             move_backward = false;
-            if(getGlobalBounds().top <= it.getGlobalBounds().top)
+            if(getGlobalBounds().top <= it.getGlobalBounds().top - jumpHight_)
             {
                 colisionType = 4;
             }
@@ -343,6 +332,7 @@ int Enemy::isColliding(std::vector<sf::Sprite> obstacles)
     return colisionType;
 }
 
+bool flag = false;
 void Enemy::gravity(std::vector<sf::Sprite> obstacles)
 {
     bool gravity_flag = true;
@@ -359,13 +349,13 @@ void Enemy::gravity(std::vector<sf::Sprite> obstacles)
                 getPosition().x <= it.getPosition().x + it.getGlobalBounds().width - 10 &&
                 gravity_flag)
         {
-            if (speedUp_ < maxSpeed_)
+            if (speedUp_ < maxSpeedDown_)
             {
-                this -> move(0 * elapsed_, (speedUp_ += gravity_) * 0.01666);
+                this -> move(0, (speedUp_ += gravity_) * 0.01666);
             }
             else
             {
-                this -> move(0 * elapsed_, maxSpeed_ * 0.01666);
+                this -> move(0, maxSpeedDown_ * 0.01666);
             }
             is_on_floor_ = false;
             gravity_flag = false;
@@ -375,7 +365,11 @@ void Enemy::gravity(std::vector<sf::Sprite> obstacles)
                  getPosition().x <= it.getPosition().x + it.getGlobalBounds().width - 10 &&
                  getPosition().y < it.getPosition().y)
         {
-            setPosition(getPosition().x, it.getGlobalBounds().top - getGlobalBounds().height + floorOffset_);
+            if (flag)
+            {
+                setPosition(getPosition().x, it.getGlobalBounds().top - getGlobalBounds().height + floorOffset_);
+            }
+            flag = true;
             speedUp_ = 0;
             is_on_floor_ = true;
         }
@@ -387,8 +381,15 @@ bool Enemy::getOrientation()
     return orientated_right_;
 }
 
+float Enemy::getMaxSpeed()
+{
+    return maxSpeedForward_;
+}
 
-
+float Enemy::getHealth()
+{
+    return health_;
+}
 
 
 

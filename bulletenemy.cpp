@@ -1,13 +1,5 @@
 #include "bulletenemy.h"
 
-#include "enemy.h"
-
-#include <vector>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <math.h>
-
 BulletEnemy::BulletEnemy(sf::Vector2f size)
 {
     bulletEnemy.setSize(size);
@@ -84,13 +76,10 @@ sf:: FloatRect BulletEnemy::getGlobalBounds()
     return bulletEnemy.getGlobalBounds();
 }
 
-void BulletEnemy::deleteBullet()
+sf::Vector2f BulletEnemy::getBulletPosition()
 {
-    bulletEnemy.setPosition(100000 , 100000);
+    return bulletEnemy.getPosition();
 }
-
-
-
 
 
 

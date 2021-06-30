@@ -13,29 +13,29 @@ public:
     float getBulletSpeed();
     float getDamage();
     float getReloadingTime();
+    float getCurretnReloadingTime();
     int getMagazineCapasity();
     int getLeftInMagazine();
+    int getBulletNumber();
+    int getGunType();
     bool getFullauto();
     void setLeftInMagazine(int leftInMagazine);
     void setFireRate(float fireRate);
     void setCurrettReloadingTime(float currentReloadingTime);
-    float getCurretnReloadingTime();
     void setBulletNumber(int bulletNumber);
-    int getBulletNumber();
-    int getGunType();
     sf::SoundBuffer getReloadSound();
 
     bool shooting_flag = true;
 
 private:
+    bool fullauto_;
     float fireRate_;
     float bulletSpeed_;
     float damage_;
     float reloadingTime_;
-    int magazineCapasity_;
-    int leftInMagazine_;
-    bool fullauto_;
     float currentReloadingTime_ = 0;
     int bulletNumber_;
     int gunType_;
+    int magazineCapasity_;
+    int leftInMagazine_;
 };

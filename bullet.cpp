@@ -1,11 +1,5 @@
 #include "bullet.h"
 
-#include <vector>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <math.h>
-
 Bullet::Bullet(sf::Vector2f size)
 {
     bullet.setSize(size);
@@ -82,13 +76,10 @@ sf:: FloatRect Bullet::getGlobalBounds()
     return bullet.getGlobalBounds();
 }
 
-void Bullet::deleteBullet()
+sf::Vector2f Bullet::getBulletPosition()
 {
-    bullet.setPosition(1000000 , 1000000);
+    return bullet.getPosition();
 }
-
-
-
 
 
 

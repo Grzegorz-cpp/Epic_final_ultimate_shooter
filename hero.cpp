@@ -1,7 +1,5 @@
 #include "hero.h"
 
-#include <iostream>
-
 Hero::Hero(const sf::Vector2f &position, sf::Texture &texture, sf::Vector2i textureLayout, sf::Vector2i textureSize)
 {
     loadTexture(position, texture, textureLayout, textureSize);
@@ -36,6 +34,38 @@ void Hero::setArmor(float armor)
 float Hero::getHealth()
 {
     return health_;
+}
+
+void Hero::setMaxSpeed(float maxSpeed)
+{
+    maxSpeed_ = maxSpeed;
+}
+
+
+float Hero::getMaxHealth()
+{
+    return maxHealth_;
+}
+
+void Hero::setMaxHealth(float maxHealth)
+{
+    maxHealth_ = maxHealth;
+}
+
+
+float Hero::getMaxArmor()
+{
+    return maxArmor_;
+}
+
+void Hero::setMaxArmor(float maxArmor)
+{
+    maxArmor_ = maxArmor;
+}
+
+void Hero::setFloorOffset(int floorOffset)
+{
+    floorOffset_ = floorOffset;
 }
 
 void Hero::control()
@@ -136,11 +166,6 @@ void Hero::isColliding(std::vector<sf::Sprite> obstacles)
             colision = true;
             setSpeed(0);
         }
-//        if (move_up == true)
-//        {
-//            move(0, speedUp_ * 0.01);
-//            move_up = false;
-//        }
         if(getPosition().y <= it.getPosition().y + it.getGlobalBounds().height &&
                 getPosition().y >= it.getPosition().y  &&
                 getPosition().y + getGlobalBounds().height >= it.getPosition().y + it.getGlobalBounds().height &&
@@ -176,13 +201,13 @@ void Hero::gravity(std::vector<sf::Sprite> obstacles)
                 getPosition().x <= it.getPosition().x + it.getGlobalBounds().width - 10 &&
                 gravity_flag)
         {
-            if (speedUp_ < maxSpeed_)
+            if (speedUp_ < maxSpeedDown_)
             {
                 move(0 * elapsed_, (speedUp_ += gravity_) * elapsed_);
             }
             else
             {
-                move(0 * elapsed_, maxSpeed_ * elapsed_);
+                move(0 * elapsed_, maxSpeedDown_ * elapsed_);
             }
             is_on_floor_ = false;
             gravity_flag = false;
@@ -219,6 +244,16 @@ void Hero::hit(std::vector<BulletEnemy *> BulletVector_enemy, std::vector<float>
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
